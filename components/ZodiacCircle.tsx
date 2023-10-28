@@ -38,6 +38,4 @@ const ZodiacCircle = () => {
     </motion.div>
   )
 }
-
 export default ZodiacCircle
-

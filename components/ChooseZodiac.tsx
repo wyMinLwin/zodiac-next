@@ -1,5 +1,5 @@
 "use client"
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { Variants, motion } from 'framer-motion'
 import data from '@/public/data/zodiac.json';
 import Image from 'next/image';
@@ -16,7 +16,7 @@ const ChooseZodiac = () => {
           transition: { type: "spring", stiffness: 300, damping: 24 }
         },
         closed: { opacity: 0, y: 20, transition: { duration: 0.2 } }
-      };
+    };
 
       const zodiacBox: Variants = {
         hidden: {
@@ -32,39 +32,31 @@ const ChooseZodiac = () => {
                 type: "spring", stiffness: 500, damping: 34, bounce:20
             }
         },
+    };
+    
+    const [monthDialog, setMonthDialog] = useState(false);
+    const [monthValue, setMonthValue] = useState<number>();
+    const [dateDialog, setDateDialog] = useState(false);
+    const [dateValue, setDateValue] = useState<number>();
+    const getTotalNumberOfDatesByMonth = useCallback((month:number) => {
+      return new Date(new Date().getFullYear(), month+1, 0).getDate();
+    },[]);
+    const zodiacDataToRender = useMemo(() => {
+      if (typeof monthValue === 'number') {
+          let arr = [];
+          arr = data.ZodiacSignsDetail.filter( z => z.Dates.includes(months[monthValue]));
+          if (dateValue) {
+              const filteredByDate = arr.filter(z =>  {
+                  if (z.Dates.startsWith(months[monthValue])) {
+                      if (datePeriods[z.Id-1][0] <= dateValue) return z;
+                  } else if (datePeriods[z.Id-1][1] >= dateValue) return z;
+              });
+              return filteredByDate;
+          }
+          return arr;
       }
-
-      
-
-      // [{1,20 - 2,10} {2,11 - 3,1}] -> (2) [0,1] -> (2,20) -> [1]
-
-      const [monthDialog, setMonthDialog] = useState(false);
-      const [monthValue, setMonthValue] = useState<number>();
-      const [dateDialog, setDateDialog] = useState(false);
-      const [dateValue, setDateValue] = useState<number>();
-
-      const getTotalNumberOfDatesByMonth = useCallback((month:number) => {
-        return new Date(new Date().getFullYear(), month+1, 0).getDate();
-      },[]);
-
-      const zodiacDataToRender = useMemo(() => {
-        if (typeof monthValue === 'number') {
-            let arr = [];
-            arr = data.ZodiacSignsDetail.filter( z => z.Dates.includes(months[monthValue]));
-            if (dateValue) {
-                const filteredByDate = arr.filter(z =>  {
-                    if (z.Dates.startsWith(months[monthValue])) {
-                        if (datePeriods[z.Id-1][0] <= dateValue) return z;
-                    } else {
-                        if (datePeriods[z.Id-1][1] >= dateValue) return z;
-                    }
-                });
-                return filteredByDate;
-            }
-            return arr;
-        }
-        return data.ZodiacSignsDetail;
-      },[monthValue,dateValue]);
+      return data.ZodiacSignsDetail;
+    },[monthValue,dateValue]);
 
   return (
     <div className='my-3'>
@@ -193,5 +185,4 @@ const ChooseZodiac = () => {
     </div>
   )
 }
-
 export default ChooseZodiac

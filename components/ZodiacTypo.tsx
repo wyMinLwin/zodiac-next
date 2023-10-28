@@ -12,7 +12,6 @@ const ZodiacTypo = () => {
                 duration: 3,
                 ease: "easeOut",
             },
-            
         }),
       }
   return (
@@ -27,7 +26,6 @@ const ZodiacTypo = () => {
         viewBox="0 0 350 65"
     >
         <g>
-
             <motion.text
                 custom={0}
                 className='stroke-1 fill-none stroke-amber-50 text-6xl font-header'
@@ -75,10 +73,8 @@ const ZodiacTypo = () => {
                 >
             {"c"}
             </motion.text>
-        </g>
-        
+        </g>       
     </motion.svg>
   )
 }
-
 export default ZodiacTypo
